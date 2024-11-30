@@ -17,10 +17,22 @@ func drawString(screen tcell.Screen, x, y int, msg string) {
 func setupCoins(level int, xmax, ymax int) []*Sprite {
   coins := make([]*Sprite, level+2)
   for index := range level+2 {
+    invalid := true
+    x, y := -1, -1
+    for invalid {
+      x = rand.Intn(xmax)
+      y = rand.Intn(ymax)
+      // ensure they aren't spawned inside of the text area
+      if (x > 16 || y > 4) {
+        break
+      }
+    }
+
+
     coins[index] = NewSprite(
       '©',
-      rand.Intn(xmax),
-      rand.Intn(ymax),
+      x,
+      y,
       tcell.StyleDefault.Foreground(tcell.ColorYellow),
     )
   }
@@ -31,18 +43,22 @@ func setupBugs(level int, xmax, ymax, xspeed, yspeed int, ) []*Projectile {
   count := level + 1
   bugs := make([]*Projectile, count)
   for index := range count {
-    bugs[index] = NewProjectile('𓆣', rand.Intn(xmax), rand.Intn(ymax), 
-    tcell.StyleDefault.Foreground(tcell.ColorLimeGreen), xspeed, yspeed)
+    sx := xspeed
+    sy := yspeed
     randomDirection := rand.Intn(4)
     if randomDirection > 0 {
-      bugs[index].SpeedX = -1;
+      sx *= -1
     }
     if randomDirection > 1 {
-      bugs[index].SpeedY = -1;
+      sy *= -1
     }
     if randomDirection > 2 {
-      bugs[index].SpeedY = 1;
+      sx *= -1
     }
+
+    bugs[index] = NewProjectile('𓆣', rand.Intn(xmax), rand.Intn(ymax), 
+    tcell.StyleDefault.Foreground(tcell.ColorLimeGreen), sx, sy)
+
   }
   return bugs
 }
@@ -103,7 +119,7 @@ func game(screen tcell.Screen, xmax, ymax int) (int, int) {
     drawString( screen, 1, 1, fmt.Sprintf("Press Q to quit."),)
     drawString( screen, 1, 2, fmt.Sprintf("Score: %d", score),)
     drawString( screen, 1, 3, fmt.Sprintf("Level: %d", level),) 
-    drawString(screen, 147, 0, fmt.Sprintf("FPS: %d", fps))
+    drawString(screen, 1, 4, fmt.Sprintf("FPS: %d", fps))
 
     screen.Show()
 
