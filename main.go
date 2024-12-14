@@ -56,7 +56,7 @@ func setupBugs(level int, xmax, ymax, xspeed, yspeed int, ) []*Projectile {
       sx *= -1
     }
 
-    bugs[index] = NewProjectile('𓆣', rand.Intn(xmax), rand.Intn(ymax), 
+    bugs[index] = NewProjectile('𓆣', 1 + rand.Intn(xmax - 1), 1 + rand.Intn(ymax - 1), 
     tcell.StyleDefault.Foreground(tcell.ColorLimeGreen), sx, sy)
 
   }
