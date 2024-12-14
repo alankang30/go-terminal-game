@@ -70,8 +70,6 @@ func game(screen tcell.Screen, xmax, ymax int) (int, int) {
   //   log.Fatal(err)
   // }
 
-
-
   // err = screen.Init();
   // if err != nil {
   //   log.Fatal(err)
